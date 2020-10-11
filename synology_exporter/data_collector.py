@@ -75,12 +75,18 @@ class DataInfoCollect(DataCollect):
 class DataStatCollect(DataCollect):
 
     def get_synology_use(self):
+        memory_size = self._client.utilisation.memory_size()
+        memory_available = self._client.utilisation.memory_available_real()
+        memory_use = memory_size - memory_available
+
         data = {
             "cpu_system_load": self._client.utilisation.cpu_system_load,
             "cpu_user_load": self._client.utilisation.cpu_user_load,
             "cpu_other_load": self._client.utilisation.cpu_other_load,
             "cpu_total_load": self._client.utilisation.cpu_total_load,
-            "mem_available": self._client.utilisation.memory_available_real(),
+            "mem_size": memory_size,
+            "mem_available": memory_available,
+            "mem_use": memory_use,
             "mem_use_prc": int(self._client.utilisation.memory_real_usage),
             "mem_available_swap": self._client.utilisation.memory_available_swap(),
             "mem_cached": self._client.utilisation.memory_cached(),
