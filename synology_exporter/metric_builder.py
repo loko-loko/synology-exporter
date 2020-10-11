@@ -80,10 +80,10 @@ class SynoMetricBuilder():
             gauge = GaugeMetricFamily(
                 f"synology_share_{metric}",
                 f"Synology Share Metrics",
-                labels=["dsm", "uuid", "name", "path"]
+                labels=["dsm", "uuid", "path"]
             )
             for share in data["shares"]:
-                tags = [self.name, share["uuid"], share["name"], share["path"]]
+                tags = [self.name, share["uuid"], share["path"]]
                 gauge.add_metric(tags, share[metric])
             yield gauge
 

@@ -147,8 +147,10 @@ class DataShareCollect(DataCollect):
         for share_uuid in self._client.share.shares_uuids:
             shares.append({
                 "uuid": share_uuid,
-                "name": self._client.share.share_name(share_uuid),
-                "path": self._client.share.share_path(share_uuid),
+                "path": (
+                    f"{self._client.share.share_path(share_uuid)}"
+                    f"/{self._client.share.share_name(share_uuid)}"
+                ),
                 "used": self._client.share.share_size(share_uuid),
                 "recycle_bin": self._client.share.share_recycle_bin(share_uuid)
             })
