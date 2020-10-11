@@ -76,8 +76,14 @@ class DataStatCollect(DataCollect):
 
     def get_synology_use(self):
         data = {
-            "cpu_load": self._client.utilisation.cpu_total_load,
-            "mem_use": self._client.utilisation.memory_real_usage,
+            "cpu_system_load": self._client.utilisation.cpu_system_load,
+            "cpu_user_load": self._client.utilisation.cpu_user_load,
+            "cpu_other_load": self._client.utilisation.cpu_other_load,
+            "cpu_total_load": self._client.utilisation.cpu_total_load,
+            "mem_available": self._client.utilisation.memory_available_real(),
+            "mem_use_prc": int(self._client.utilisation.memory_real_usage),
+            "mem_available_swap": self._client.utilisation.memory_available_swap(),
+            "mem_cached": self._client.utilisation.memory_cached(),
             "net_up": self._client.utilisation.network_up(),
             "net_down": self._client.utilisation.network_down(),
         }
@@ -106,6 +112,8 @@ class DataStorageCollect(DataCollect):
                 "id": volume_id,
                 "status": self.get_status(self._client.storage.volume_status(volume_id)),
                 "used_prc": self._client.storage.volume_percentage_used(volume_id),
+                "size_total": self._client.storage.volume_size_total(volume_id),
+                "raid_type": self._client.storage.volume_device_type(volume_id),
             })
         return volumes
 
@@ -116,6 +124,7 @@ class DataStorageCollect(DataCollect):
                 "id": disk_id,
                 "name": self._client.storage.disk_name(disk_id),
                 "status": self.get_status(self._client.storage.disk_status(disk_id)),
+                "below_remain_life_thr": self._client.storage.disk_below_remain_life_thr(disk_id),
                 "temperature": self._client.storage.disk_temp(disk_id)
             })
         return disks
